@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from .models import Flight
-from django.utils import timezone 
+from django.utils import timezone
+
+from rest_framework import serializers
+from .models import Flight
 
 class FlightSerializer(serializers.ModelSerializer):
     class Meta:
@@ -8,13 +11,19 @@ class FlightSerializer(serializers.ModelSerializer):
         fields = ['id', 'flight_number', 'departure', 'destination', 'departure_time', 'arrival_time', 'airplane']
 
     def validate_departure_time(self, value):
-        """Ensure departure time is in the future."""
-        if value <  timezone.now():
+      
+        if value < timezone.now():
             raise serializers.ValidationError("Departure time must be in the future.")
         return value
 
     def validate(self, data):
-        """Ensure arrival time is after departure time."""
+      
         if data['departure_time'] >= data['arrival_time']:
             raise serializers.ValidationError("Arrival time must be after departure time.")
         return data
+
+    def validate_flight_number(self, value):
+       
+        if Flight.objects.filter(flight_number=value).exists():
+            raise serializers.ValidationError("This flight number already exists.")
+        return value

@@ -1,9 +1,8 @@
 from django.urls import path
-from .views import FlightList, FlightDetail
-
+from .views import FlightList, FlightDetail, FlightReservations
 
 urlpatterns = [
-    path('', FlightList.as_view(), name='flight-list'),  # Tüm uçuşları listeleme ve ekleme
-    path('<int:pk>/', FlightDetail.as_view(), name='flight-detail'),  # Tekil uçuş detayı, güncelleme ve silme
+    path('', FlightList.as_view(), name='flight-list'),
+    path('<int:pk>/', FlightDetail.as_view(), name='flight-detail'),
+    path('<int:flight_id>/reservations/', FlightReservations.as_view(), name='flight-reservations'),  
 ]
-
